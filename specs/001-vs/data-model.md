@@ -4,7 +4,7 @@
 
 Represents aggregated bicycle rental trip data.
 
-**Source**: `data/*.parquet`
+**Source**: `data/paraquet/{YEAR}/*.parquet`
 
 **Attributes**:
 
@@ -60,3 +60,31 @@ Represents the registered population for different administrative districts in S
 - `[YYYY Q/Q]` columns: Columns representing population count for each year and quarter (e.g., `2020 1/4`, `2025 1/2`, `2024` ). (Integer)
 
 **Note**: This file has a 2-line multi-level header. The first line indicates the year and quarter, and the second line indicates '계 (명)' for population counts.
+
+## 4. 요약 데이터 (Summarized Data)
+
+기존 parquet 데이터를 분석 목적에 맞게 가공하여 생성한 요약 데이터입니다.
+
+### 4.1. 일별/시간대별 요약 (Daily/Hourly Summary)
+
+**Source**: `data/summary/summary_daily_hourly_{YEAR}.parquet`
+
+**생성 방식**: `data/paraquet/{YEAR}/*.parquet` 원본 데이터에서 `기준_날짜`, `기준_시간대` 정보를 추출하고, 시간대별 `전체_건수`를 합산하여 생성합니다. 이를 통해 각 시간대의 총 대여 건수를 나타냅니다.
+
+**Attributes**:
+- `year`: 년도
+- `month`: 월
+- `day`: 일
+- `hour`: 시간
+- `total_rentals`: 총 대여 건수
+
+### 4.2. 월별 요약 (Monthly Summary)
+
+**Source**: `data/summary/summary_monthly_{YEAR}.parquet`
+
+**생성 방식**: `data/paraquet/{YEAR}/*.parquet` 원본 데이터에서 `기준_날짜` 정보를 이용하여 월별 `전체_건수`를 합산하여 생성합니다. 월별 총 대여 건수를 나타냅니다.
+
+**Attributes**:
+- `year`: 년도
+- `month`: 월
+- `total_rentals`: 총 대여 건수
