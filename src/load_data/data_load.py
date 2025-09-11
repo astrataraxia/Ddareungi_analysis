@@ -30,15 +30,14 @@ def load_parquet_month_data(year, month, columns=None, chunk_size=100_000):
     file = os.path.join(year_folder, f'bycle_{year}{month:02d}.parquet')
     return pd.read_parquet(file, columns=columns)
 
-def load_station_data(file_path):
-    return pd.read_csv(file_path, encoding='cp949')
+def load_station_data():
+    file = os.path.join('data','bcycle_master_location.csv')
+    return pd.read_csv(file, encoding='cp949')
 
 
-def load_population_data(file_path):
-    """
-    다중 헤더를 가진 인구 데이터 CSV를 로드하고, 컬럼 이름의 공백을 정리합니다.
-    """
-    df = pd.read_csv(file_path, header=[0, 1])
+def load_population_data():
+    file = os.path.join('data','registered_population.csv')
+    df = pd.read_csv(file, header=[0, 1])
 
     # 2. 컬럼 이름의 공백을 제거하는 로직
     cleaned_columns = []
