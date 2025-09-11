@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from src.data_load import load_parquet_year_data,load_station_data, load_population_data
+from src.load_data.data_load import load_parquet_year_data,load_station_data, load_population_data
 
 # --- 페이지 설정 ---
 # layout="wide"로 변경하여 넓은 화면을 모두 사용합니다.
@@ -50,15 +50,14 @@ def main_page():
 
     # --- 2. 프로젝트 목표 ---
     # st.expander를 사용하여 내용을 기본적으로 숨겨두고, 클릭하면 펼쳐지도록 합니다.
-    with st.expander("🎯 프로젝트 목표 자세히 보기"):
+    with st.expander("🎯 프로젝트 목표 자세히 보기", expanded=True):
         st.markdown("""
         이 분석을 통해 다음과 같은 질문에 대한 답을 찾고자 합니다.
         - **01 시간대별 수요 예측:** 사용자들이 주로 언제 따릉이를 이용할까요? (월/요일/시간대)
         - **02 이용 시간과 거리의 관계:** 이용 시간과 이동 거리간의 관계는 어떻게 될까요?
-        - **03 주요 이용 경로 파악:** 시민들은 어떤 경로로 가장 많이 이동할까요? (인기 대여소 및 경로)
-        - **04 이용 행태 분석:** 편도(e.g. 출퇴근)과 왕복(e.g. 레저) 이용 비율은 어떻게 다를까요?
-        - **05 인구 데이터와 연관성 분석:** 서울시 인구 변화가 따릉이 수요에 미치는 영향이 있을까요?
-        - **06 데이터 분석을 통한 인사이트 도출:** 데이터 분석을 통해 따릉이 서비스 개선에 활용할 수 있는 인사이트는 무엇일까요?
+        - **03 이용 행태 분석:** 시민들은 어떤 곳에서 자전거를 많이 빌리고 반납의 형태(편도,왕복) 어떻게 될까요?
+        - **04 인구 데이터와 연관성 분석:** 서울시 인구 변화가 따릉이 수요에 미치는 영향이 있을까요?
+        - **05 데이터 분석을 통한 인사이트 도출:** 데이터 분석을 통해 따릉이 서비스 개선에 활용할 수 있는 인사이트는 무엇일까요?
         """)
     st.write("") # 섹션 간 여백
     st.markdown("---") # 구분선 추가
@@ -72,7 +71,7 @@ def main_page():
 
     # st.expander를 사용하여 각 데이터 섹션을 접고 펼 수 있는 목록 형태로 만듭니다.
     # 첫 번째 항목은 expanded=True로 설정하여 기본적으로 펼쳐져 있도록 합니다.
-    with st.expander("📊 1. 따릉이 이용 내역", expanded=True):
+    with st.expander("📊 1. 따릉이 이용 내역"):
         st.markdown("2020년부터 2025년까지의 시간대/대여소별 대여 및 반납 기록 데이터입니다. 데이터의 크기가 매우 커 메모리 효율적인 방식으로 처리해야 합니다.")
         st.info(
             """
