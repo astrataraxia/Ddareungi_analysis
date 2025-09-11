@@ -13,7 +13,7 @@ st.set_page_config(
 
 # --- 데이터 로딩 함수 (기존과 동일) ---
 @st.cache_data
-def get_parquet_sample_data(file_path_pattern):
+def get_parquet_sample_data():
     """Parquet 파일 제너레이터에서 첫 번째 청크의 상위 5개 행만 샘플로 반환합니다."""
     try:
         first_chunk = next(load_parquet_year_data(2020))
@@ -23,16 +23,16 @@ def get_parquet_sample_data(file_path_pattern):
         return None
 
 @st.cache_data
-def get_station_data(file_path):
+def get_station_data():
     try:
-        return load_station_data(file_path)
+        return load_station_data()
     except FileNotFoundError:
         return None
 
 @st.cache_data
-def get_population_data(file_path):
+def get_population_data():
     try:
-        return load_population_data(file_path)
+        return load_population_data()
     except FileNotFoundError:
         return None
 
@@ -81,7 +81,7 @@ def main_page():
             - `전체_건수`: 각 시간대의 총 이용량을 나타내어 수요를 파악하는 데 사용됩니다.
             """, icon="✅"
         )
-        usage_df_sample = get_parquet_sample_data("data")
+        usage_df_sample = get_parquet_sample_data()
         if usage_df_sample is not None:
             st.dataframe(usage_df_sample, width='stretch')
         else:
@@ -96,7 +96,7 @@ def main_page():
             - `위도`, `경도`: 지도 시각화를 위한 핵심적인 위치 좌표 정보입니다.
             """, icon="✅"
         )
-        station_df = get_station_data("data/bcycle_master_location.csv")
+        station_df = get_station_data()
         if station_df is not None:
             st.dataframe(station_df.head(), width='stretch')
         else:
@@ -111,7 +111,7 @@ def main_page():
             - `'YYYY Q/Q'` 형태의 컬럼: 각 연도/분기별 인구수를 나타내는 다중 헤더 구조를 가집니다.
             """, icon="✅"
         )
-        population_df = get_population_data("data/registered_population.csv")
+        population_df = get_population_data()
         if population_df is not None:
             st.dataframe(population_df.head(), width='stretch')
         else:
