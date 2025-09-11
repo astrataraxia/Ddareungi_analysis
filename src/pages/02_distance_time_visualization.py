@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import altair as alt
-import os
 
 # src.load_data.distance_data_load 모듈에 load_yearly_summary_data 함수가 있다고 가정합니다.
 from src.load_data.distance_data_load import load_yearly_summary_data

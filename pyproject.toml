@@ -15,6 +15,7 @@ dependencies = [
     "ruff>=0.1.0", # Added ruff dependency
     "pytest-mock>=3.15.0",
     "pyarrow>=21.0.0",
+    "branca>=0.8.1",
 ]
 
 [tool.ruff]

@@ -89,23 +89,71 @@ Represents the registered population for different administrative districts in S
 - `month`: 월
 - `total_rentals`: 총 대여 건수
 
-### 4.3 
+### 4.3. 이용 시간/거리 분석 데이터 (Usage Time/Distance Analysis Data)
 
 **Source**: `data/02/distance_time_{YEAR}.parquet`
 
-**생성 방식**: `data/paraquet/{YEAR}/*.parquet` 원본 데이터에서 `기준_날짜` 정보를 이용하여 `요일`을 생성, `전체_이용_분`, `전체_이용_거리`는 원본 데이터에서 추출.
+**생성 방식**: `data/parquet/{YEAR}/*.parquet` 원본 데이터에서 `기준_날짜`, `전체_이용_분`, `전체_이용_거리` 컬럼을 추출합니다. `기준_날짜`는 `요일` 정보(월요일=0, 일요일=6)를 생성하는 데 사용된 후 제거됩니다. 결측치와 이상치가 제거된 정제된 데이터입니다.
 
 **Attributes**:
- - `전체_이용_분`: 사용 시간
- - `전체_이용_거리`: 이용거리
- - `요일`: (월요일=0, 일요일=6)
+- `전체_이용_분` (float64): 총 이용 시간 (분)
+- `전체_이용_거리` (float64): 총 이동 거리 (미터)
+- `요일` (int64): 요일 정보 (월요일=0, 일요일=6)
+
+---
 
 **Source**: `data/02/yearly_summary.parquet`
--   `year`             6 non-null      int64
--   `total_records`    6 non-null      int64
--   `avg_time`         6 non-null      float64
--   `avg_distance`     6 non-null      float64
--   `median_time`      6 non-null      float64
--   `median_distance`  6 non-null      float64
--   `std_time`         6 non-null      float64
--   `std_distance`     6 non-null      float64
+
+**생성 방식**: `distance_time_{YEAR}.parquet` 데이터를 연도별로 그룹화하여 주요 통계(평균, 중앙값, 표준편차 등)를 계산합니다.
+
+**Attributes**:
+- `year` (int64): 연도
+- `total_records` (int64): 유효 데이터 건수
+- `avg_time` (float64): 평균 이용 시간 (분)
+- `avg_distance` (float64): 평균 이용 거리 (미터)
+- `median_time` (float64): 이용 시간의 중앙값 (분)
+- `median_distance` (float64): 이용 거리의 중앙값 (미터)
+- `std_time` (float64): 이용 시간의 표준편차 (분)
+- `std_distance` (float64): 이용 거리의 표준편차 (미터)
+
+---
+
+**Source**: `data/02/yearly_detailed_summary.json`
+
+**생성 방식**: `distance_time_{YEAR}.parquet` 데이터를 기반으로 `yearly_summary.parquet`의 통계를 포함하여, 요일별 평균 이용 시간 및 거리 등 더 상세한 정보를 JSON 형식으로 저장합니다.
+
+**Attributes**:
+- `weekday_avg_time` (dict): 요일별 평균 이용 시간
+- `weekday_avg_distance` (dict): 요일별 평균 이용 거리
+- (`yearly_summary.parquet`의 모든 필드 포함)
+
+### 4.4. 대여소 및 경로 분석 데이터 (Station and Route Analysis Data)
+
+**Source**: `data/03/station_summary.parquet`
+
+**생성 방식**: 모든 기간의 원본 데이터를 스트리밍 방식으로 처리하여, 각 대여소별 총 대여 건수와 총 반납 건수를 집계합니다. 이 후 마스터 대여소 정보(`bcycle_master_location.csv`)와 결합하여 주소 및 좌표 정보를 추가합니다.
+
+**Attributes**:
+- `대여소_ID` (object): 대여소 고유 ID
+- `주소1` (object): 대여소의 기본 주소
+- `주소2` (object): 대여소의 상세 주소
+- `위도` (float64): 위도 좌표
+- `경도` (float64): 경도 좌표
+- `총_대여건수` (int64): 해당 대여소에서 출발한 총 대여 건수
+- `총_반납건수` (int64): 해당 대여소에 도착한 총 반납 건수
+- `총_이용건수` (int64): 총 대여 + 총 반납 건수
+- `순이동량` (int64): 총 대여 - 총 반납 건수 (양수: 유출, 음수: 유입)
+
+---
+
+**Source**: `data/03/route_summary.parquet`
+
+**생성 방식**: 모든 기간의 원본 데이터를 스트리밍 방식으로 처리하여, (시작 대여소, 종료 대여소) 쌍으로 그룹화하여 경로별 총 이용 건수를 집계합니다. 이후 마스터 대여소 정보를 결합하여 각 경로의 시작점과 종료점의 주소 및 좌표 정보를 추가합니다.
+
+**Attributes**:
+- `시작_대여소_ID` (object): 출발 대여소 ID
+- `종료_대여소_ID` (object): 도착 대여소 ID
+- `이용_건수` (int64): 해당 경로의 총 이용 건수
+- `이용_형태` (object): '편도' 또는 '왕복' (시작점과 도착점이 동일한 경우 '왕복')
+- `주소1_시작` / `주소2_시작` / `위도_시작` / `경도_시작`: 출발지 정보
+- `주소1_종료` / `주소2_종료` / `위도_종료` / `경도_종료`: 도착지 정보
