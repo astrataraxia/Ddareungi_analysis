@@ -88,3 +88,24 @@ Represents the registered population for different administrative districts in S
 - `year`: 년도
 - `month`: 월
 - `total_rentals`: 총 대여 건수
+
+### 4.3 
+
+**Source**: `data/02/distance_time_{YEAR}.parquet`
+
+**생성 방식**: `data/paraquet/{YEAR}/*.parquet` 원본 데이터에서 `기준_날짜` 정보를 이용하여 `요일`을 생성, `전체_이용_분`, `전체_이용_거리`는 원본 데이터에서 추출.
+
+**Attributes**:
+ - `전체_이용_분`: 사용 시간
+ - `전체_이용_거리`: 이용거리
+ - `요일`: (월요일=0, 일요일=6)
+
+**Source**: `data/02/yearly_summary.parquet`
+-   `year`             6 non-null      int64
+-   `total_records`    6 non-null      int64
+-   `avg_time`         6 non-null      float64
+-   `avg_distance`     6 non-null      float64
+-   `median_time`      6 non-null      float64
+-   `median_distance`  6 non-null      float64
+-   `std_time`         6 non-null      float64
+-   `std_distance`     6 non-null      float64

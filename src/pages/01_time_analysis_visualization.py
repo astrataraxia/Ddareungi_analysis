@@ -2,7 +2,7 @@ import streamlit as st
 import altair as alt
 import pandas as pd
 
-from src.summary_data_load import load_summary_monthly_data, load_summary_daily_data
+from src.load_data.summary_data_load import load_summary_monthly_data, load_summary_daily_data
 
 # --- 페이지 기본 설정 ---
 st.set_page_config(page_title="월간, 일별 시간대별 이용량 비교 분석", page_icon="📅", layout="wide")

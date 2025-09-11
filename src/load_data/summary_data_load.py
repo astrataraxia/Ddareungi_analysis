@@ -1,8 +1,8 @@
 import pandas as pd
 import os
-from typing import List, Tuple
+from typing import Tuple
 
-SUMMARY_DATA_DIR = 'data/summary'
+SUMMARY_DATA_DIR = 'data/01'
 
 def load_summary_monthly_data(selected_years: Tuple[int, ...]) -> pd.DataFrame:
     df_list = []
