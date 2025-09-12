@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>따릉이 종합 분석 보고서</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #2196F3 0%, #21CBF3 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        .section {
+            margin-bottom: 50px;
+        }
+        .section h2 {
+            color: #2196F3;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #e3f2fd;
+        }
+        .section h3 {
+            color: #1976D2;
+            font-size: 1.4em;
+            margin: 30px 0 15px 0;
+        }
+        .insight-box {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+            border-left: 5px solid #2196F3;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.1);
+        }
+        .highlight {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #FF9800;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+        .recommendation {
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 5px solid #4CAF50;
+            margin: 25px 0;
+        }
+        .recommendation h4 {
+            color: #2E7D32;
+            margin-top: 0;
+            font-size: 1.2em;
+        }
+        .data-point {
+            display: inline-block;
+            background: #2196F3;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 5px 10px 5px 0;
+            font-size: 0.9em;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-top: 4px solid #2196F3;
+        }
+        .metric {
+            text-align: center;
+            padding: 20px;
+        }
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2196F3;
+            display: block;
+        }
+        .metric-label {
+            color: #666;
+            margin-top: 8px;
+            font-size: 0.9em;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .warning {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-left: 5px solid #f44336;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .conclusion {
+            background: linear-gradient(135deg, #1976D2, #42A5F5);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+        .conclusion h2 {
+            color: white;
+            border-bottom: 3px solid rgba(255,255,255,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 서울시 공공자전거 '따릉이' 데이터 분석 보고서</h1>
+            <p>데이터 기반 운영 혁신 및 전략적 성장 방안</p>
+        </div>
+        
+        <div class="content">
+            <!-- 핵심 요약 -->
+            <div class="section">
+                <h2>🎯 핵심 발견사항</h2>
+                <div class="grid">
+                    <div class="metric">
+                        <span class="metric-value">-0.73</span>
+                        <div class="metric-label">인구-따릉이 증감률 상관계수<br>(완전히 독립적 성장)</div>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">4.6%</span>
+                        <div class="metric-label">상위 20개 대여소가<br>전체 이용량에서 차지하는 비중</div>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">89.3%</span>
+                        <div class="metric-label">편도 이용 비율<br>(교통수단으로서의 정체성)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1. 성장 패턴 분석 -->
+            <div class="section">
+                <h2>📈 1. 성장 동력 분석: 따릉이의 독자적 생태계</h2>
+                
+                <div class="insight-box">
+                    <h3>🔍 핵심 발견: "인구와는 독립적인 성장 모델 확립"</h3>
+                    <p>2021년부터 2024년까지 서울시 인구가 지속 감소(-1.77% → -0.43%)하는 동안, 따릉이 이용률은 독립적으로 성장하여, 2023년 피크를 찍고 감소하는 모습을 보이고 있습니다.(30.90% → -6.00%)를 보였습니다. 특히 상관계수 <span class="data-point">-0.7328</span>은 두 변수가 완전히 독립적임을 증명합니다.</p>
+                </div>
+                
+                <img src="report_images/correlation_chart.png" style="width: 100%; height: auto;"/>
+
+                <div class="highlight">
+                    <strong>분석:</strong> 코로나가로 억눌렸던 야외 활동에대한 수요가 폭증한 2023년에 피크를 찍고 2024년에 감소의 추세로 돌아섰으며, 올해도 2024년과의 이용추세를 비교할때, 전년대비 하락할 것으로 예측됩니다.
+                    <div></div>
+                    <strong>전략적 시사점:</strong> 따릉이의 성장은 이미 인구수가 아닌 <strong>'이용 빈도의 증가'</strong>와 <strong>'이용자 1인당 활용도 상승'</strong>에 기반한다는 것입니다. 다시 이용추세를 늘리기 위해서는 양적 확장보다 질적 서비스 개선이 더 중요함을 의미합니다.
+                </div>
+
+                <h3>📊 계절성 패턴의 진화</h3>
+                <p>연도별 월별 데이터 분석 결과:</p>
+                <ul>
+                    <li><strong>2020-2025:</strong> 전형적인 '봄/가을 집중형' 패턴 (4-6월, 9-10월 피크)</li>
+                </ul>
+                <img src="report_images/year_month_use.png" width=900 />
+            </div>
+
+            <!-- 2. 시간대 패턴 분석 -->
+            <div class="section">
+                <h2>⏰ 2. 시간대 분석: "출퇴근 교통수단"으로서의 정체성 확립</h2>
+                
+                <div class="insight-box">
+                    <h3>🔍 핵심 발견: 예측 가능한 이중 피크 패턴</h3>
+                    <p>모든 연도에서 일관되게 <span class="data-point">오전 8-9시</span>와 <span class="data-point">오후 6-7시</span>에 뚜렷한 피크를 보이며, 새벽 4-5시에 최저점을 기록합니다. 이는 따릉이가 출/퇴근 시간 '필수 교통수단'임을 보여줍니다.</p>
+                </div>
+                <img src="report_images/month_men_bar.png" style="width: 100%; height: auto;" />
+
+                <div class="grid">
+                    <div class="card">
+                        <!-- 기존의 2020년도 수요량에서 2024년도 수요량이 상승한것에 비해 피크타임 증가율이 얼마나 되는지 보여주어야될거같다-->
+                        <h4>성장하는 피크 강도</h4>
+                        <p>2020년 오후 피크: ~ 12,000</p>
+                        <p>2024년 오후 피크: ~ 22,000</p>
+                        <strong>83% 증가</strong>
+                    </div>
+                    <div class="card">
+                        <h4>⚡ 운영상 핵심 이슈</h4>
+                        <p>피크 시간대 수요가 <strong>평시의 8-10배</strong>로 집중되어, 출퇴근 시간 집중이 필수</p>
+                    </div>
+                </div>
+
+                <div class="recommendation">
+                    <h4>즉시 실행 가능한 개선안</h4>
+                    <ul>
+                        <!-- 
+                        이미 수요 예측에대한 조사가 있기 때문에 따릉이 운영측에서도 시민 참여 재배치를 유도중
+                        출퇴근시간대(오전7~9시), 퇴근시간대(오후5~7시) 대여 혹은 반납이벤트중
+                        마일리지 적립으로 혜택을 주고 있는중. 이런 점을 고려해서 다시 생각해보아라
+                          -->
+                        <li><strong>7:30-8:30 / 17:30-18:30</strong> 시간대를 '재배치 집중 시간'으로 지정</li>
+                        <li>피크 시간 30분 전 선제적 자전거 공급을 위한 '알고리즘 재배치 시스템' 도입</li>
+                        <li>실시간 수요 예측 기반 동적 운영 매뉴얼 수립</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 3. 공간 분석 -->
+            <div class="section">
+                <h2>🗺️ 3. 공간 분석: 서울시 교통 생태계의 재편</h2>
+                
+                <div class="insight-box">
+                    <h3>🔍 핵심 발견: "소수 거점 집중" vs "광역 분산" 전략의 딜레마</h3>
+                    <p>상위 20개 대여소가 전체 이용량의 <span class="data-point">4.6%</span>를 차지하는 것은 언뜻 분산된 것처럼 보이지만, 실제로는 <strong>특정 지역군의 극명한 쏠림 현상</strong>을 의미합니다.</p>
+                </div>
+
+                <h3>📍 지역별 특성 분석</h3>
+                <div class="grid">
+                    <div class="card">
+                        <h4>🔴 유출 핫스팟 (아침 수요 집중지역)</h4>
+                        <ul>
+                            <li><strong>아차산역, 상왕십리역, 우장산역</strong> - 주거밀집지역</li>
+                            <li><strong>대학가</strong> - 서울시립대 정문, 청담공원 등</li>
+                            <li><strong>특징:</strong> 아침 7-9시 자전거 부족 현상 집중 발생</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>🔵 유입 핫스팟 (저녁 수요 집중지역)</h4>
+                        <ul>
+                            <li><strong>뚝섬유원지역, 마곡 업무지구, 센타폴리스</strong> - 업무/상업지구</li>
+                            <li><strong>CJ드림시티, LG사이언스파크</strong> - 기업 단지</li>
+                            <li><strong>특징:</strong> 저녁 6-8시 자전거 포화 현상 발생</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="warning">
+                    <strong>⚠️ 현재 운영의 맹점:</strong> 유출지와 유입지의 명확한 패턴이 있음에도 불구하고, 여전히 '균등 재배치' 방식으로 운영하여 효율성을 저해하고 있습니다.
+                </div>
+            </div>
+
+            <!-- 4. 이용 목적 분석 -->
+            <div class="section">
+                <h2>🚴‍♂️ 4. 이용 패턴 분석: "교통형 vs 레저형"의 명확한 구분</h2>
+                
+                <div class="insight-box">
+                    <h3>🔍 핵심 발견: 89.3% 편도 vs 10.7% 왕복의 의미</h3>
+                    <p><span class="data-point">89.3%</span>의 압도적인 편도 이용률은 따릉이가 단순한 '공유 서비스'를 넘어서 <strong>'도시 교통 인프라'</strong>로 진화했음을 의미합니다.</p>
+                </div>
+
+                <div class="grid">
+                    <div class="card">
+                        <h4>🚌 교통형 이용 (89.3%)</h4>
+                        <p><strong>대표 경로:</strong></p>
+                        <ul>
+                            <li>뚝섬유원지역 → 롯데백화점</li>
+                            <li>성수2가 → 아차산로</li>
+                            <li>자양나들목 → 뚝섬유원지역</li>
+                        </ul>
+                        <p><strong>특징:</strong> 지하철-따릉이 연계 교통이 주류</p>
+                    </div>
+                    <div class="card">
+                        <h4>🌳 레저형 이용 (10.7%)</h4>
+                        <p><strong>핫스팟:</strong></p>
+                        <ul>
+                            <li>뚝섬유원지, 월드컵공원</li>
+                            <li>서울숲, 청계천 생태교실</li>
+                            <li>올림픽공원, 여의나루</li>
+                        </ul>
+                        <p><strong>특징:</strong> 주말과 공휴일 집중, 장시간 이용</p>
+                    </div>
+                </div>
+
+                <div class="recommendation">
+                    <h4>💡 목적별 차별화 전략</h4>
+                    <ul>
+                        <li><strong>교통형 거점:</strong> 출퇴근 시간 가용성 보장을 위한 '예약 시스템' 도입 검토</li>
+                        <li><strong>레저형 거점:</strong> 주말 임시 거치대 확충 및 관광 정보 연계 서비스</li>
+                        <li><strong>복합형 거점:</strong> 시간대별 탄력 운영으로 두 수요 모두 충족</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 종합 결론 -->
+            <div class="conclusion">
+                <h2>🎯 종합 결론 및 전략적 제언</h2>
+                
+                <h3>💡 핵심 통찰: "예측 가능한 불균형"의 기회 전환</h3>
+                <p>데이터 분석을 통해 따릉이의 '쏠림 현상'은 무작위가 아닌 <strong>고도로 예측 가능한 패턴</strong>임을 확인했습니다. 이는 문제가 아닌 <strong>최적화의 기회</strong>입니다.</p>
+
+                <div class="grid" style="margin-top: 30px;">
+                    <div class="recommendation" style="background: rgba(255,255,255,0.15); border-left-color: white;">
+                        <h4 style="color: white;">🚀 1단계: 즉시 실행 (1-3개월)</h4>
+                        <ul>
+                            <li>아침 7:30, 저녁 17:30 '재배치 골든타임' 운영</li>
+                            <li>유출-유입 거점 20곳 집중 관리 체계 구축</li>
+                            <li>피크 시간 전 30분 선제적 공급 프로토콜 수립</li>
+                        </ul>
+                    </div>
+                    <div class="recommendation" style="background: rgba(255,255,255,0.15); border-left-color: white;">
+                        <h4 style="color: white;">📊 2단계: 시스템 고도화 (3-6개월)</h4>
+                        <ul>
+                            <li>실시간 수요 예측 알고리즘 도입</li>
+                            <li>교통형-레저형 거점별 차별화 서비스</li>
+                            <li>동적 요금제를 통한 수요 분산 유도</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; padding: 25px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                    <h3 style="color: white; margin-top: 0;">📈 기대 효과</h3>
+                    <p><strong>정량적 목표:</strong> 피크 시간 자전거 가용률 70%에서 90%로 향상, 재배치 비용 30% 절감</p>
+                    <p><strong>정성적 가치:</strong> '항상 있고, 반납하기 편한' 따릉이로 시민 만족도 제고 및 친환경 교통 생태계 구축</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

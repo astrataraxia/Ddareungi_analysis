@@ -69,3 +69,25 @@ def load_summary_hourly_for_month(years, month):
         return pd.DataFrame()
         
     return pd.concat(all_year_data, ignore_index=True)
+
+def load_summary_hourly_for_year(years):
+    all_year_data = []
+
+    for year in years:
+        file_path = os.path.join(SUMMARY_DATA_DIR, f'summary_daily_hourly_{year}.parquet')
+
+    if os.path.exists(file_path):
+        df = pd.read_parquet(file_path)
+
+    year_df = df[df['year'] == year]
+
+    if not year_df.empty:
+        hourly_avg = year_df.groupby('hour')['total_rentals'].mean().reset_index()
+        hourly_avg.rename(columns={'total_rentals': 'avg_total_rentals'}, inplace=True)
+        hourly_avg['year'] = year
+        all_year_data.append(hourly_avg)
+            
+    if not all_year_data:
+        return pd.DataFrame()
+        
+    return pd.concat(all_year_data, ignore_index=True)
