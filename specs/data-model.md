@@ -157,3 +157,10 @@ Represents the registered population for different administrative districts in S
 - `이용_형태` (object): '편도' 또는 '왕복' (시작점과 도착점이 동일한 경우 '왕복')
 - `주소1_시작` / `주소2_시작` / `위도_시작` / `경도_시작`: 출발지 정보
 - `주소1_종료` / `주소2_종료` / `위도_종료` / `경도_종료`: 도착지 정보
+
+### 4.5 서울시 인구증감에 따른 따릉이 사용자 변화
+
+**Source** `data/01/summary_monthly_{Year}.parquet`
+**Source** `data/registered_population.csv`
+
+- 기존에 Preprocessing 하였던 자료들로 결과 도출이 가능하기에 이대로 사용한다.

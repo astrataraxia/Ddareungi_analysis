@@ -135,7 +135,7 @@ with tab1:
         st.subheader("🗺️ 자전거 쏠림 현상 지도")
         st.info("지도 우측 상단의 컨트롤 박스를 통해 유출(🔴)/유입(🔵)/균형(⚫) 그룹을 선택하여 볼 수 있습니다.")
         try:
-            with open('interactive_station_map.html', 'r', encoding='utf-8') as f:
+            with open('maps/interactive_station_map.html', 'r', encoding='utf-8') as f:
                 map_html = f.read()
             # 💡 5. 지도 세로 길이 조정
             st.components.v1.html(map_html, height=800, scrolling=True)
@@ -180,7 +180,7 @@ with tab2:
         st.subheader("🗺️ 서울시 주요 이동 경로 및 핫스팟")
         st.info("지도 우측 상단의 컨트롤 박스를 통해 데이터 레이어(경로/핫스팟)를 선택할 수 있습니다.")
         try:
-            with open('final_routes_map_osm.html', 'r', encoding='utf-8') as f:
+            with open('maps/final_routes_map_osm.html', 'r', encoding='utf-8') as f:
                 map_html = f.read()
             # 💡 5. 지도 세로 길이 조정
             st.components.v1.html(map_html, height=800, scrolling=True)
