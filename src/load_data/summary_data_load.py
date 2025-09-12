@@ -74,7 +74,7 @@ def load_summary_hourly_for_year(years):
     all_year_data = []
 
     for year in years:
-        file_path = os.path.join('data', 'summary', f'summary_daily_hourly_{year}.parquet')
+        file_path = os.path.join('data', '01', f'summary_daily_hourly_{year}.parquet')
 
         try:
             df = pd.read_parquet(file_path)
