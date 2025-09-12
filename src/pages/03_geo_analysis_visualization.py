@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 
-from src.load_data.station_route_data_load import load_station_summary_data, load_route_summary_data
+from load_data.station_route_data_load import load_station_summary_data, load_route_summary_data
 
 st.set_page_config(page_title="지리 정보 기반 이용 행태 분석", page_icon="🗺️", layout="wide")
 

@@ -4,7 +4,7 @@ import numpy as np
 import altair as alt
 
 # src.load_data.distance_data_load 모듈에 load_yearly_summary_data 함수가 있다고 가정합니다.
-from src.load_data.distance_data_load import load_yearly_summary_data
+from load_data.distance_data_load import load_yearly_summary_data
 
 # --- 페이지 기본 설정 ---
 st.set_page_config(page_title="연도별 이용 시간/거리 패턴 분석", page_icon="🚴‍♀️", layout="wide")

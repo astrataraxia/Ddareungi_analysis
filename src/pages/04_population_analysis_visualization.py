@@ -3,8 +3,8 @@ import pandas as pd
 import altair as alt # altair 임포트
 import os
 
-from src.load_data.data_load import load_population_data
-from src.load_data.summary_data_load import load_summary_monthly_data
+from load_data.data_load import load_population_data
+from load_data.summary_data_load import load_summary_monthly_data
 
 # --- 페이지 기본 설정 ---
 st.set_page_config(page_title="인구-따릉이 수요 상관관계 분석", page_icon="🔗", layout="wide")

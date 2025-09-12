@@ -2,7 +2,7 @@ import streamlit as st
 import altair as alt
 import pandas as pd
 
-import src.load_data.summary_data_load as sdl
+import load_data.summary_data_load as sdl
 
 # --- 페이지 기본 설정 ---
 st.set_page_config(page_title="시간 패턴 비교 분석", page_icon="📅", layout="wide")
