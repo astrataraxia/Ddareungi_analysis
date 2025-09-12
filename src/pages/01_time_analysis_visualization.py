@@ -234,6 +234,7 @@ with tab3:
         results_df = st.session_state.yearly_hourly_results
         st.markdown("---")
         st.subheader("📊 분석 결과")
+
         if results_df.empty:
             st.warning("선택하신 조건에 해당하는 데이터가 없습니다.")
         else:
@@ -251,6 +252,7 @@ with tab3:
                         off_peak_hour = int(non_zero.loc[non_zero['avg_total_rentals'].idxmin()]['hour'])
                     else:
                         peak_hour, off_peak_hour = "N/A", "N/A"
+
                     metric_cols = st.columns(2)
                     metric_cols[0].metric(label="최고 시간대 (평균)", value=f"{peak_hour} 시" if peak_hour != "N/A" else "N/A")
                     metric_cols[1].metric(label="최저 시간대 (평균)", value=f"{off_peak_hour} 시" if off_peak_hour != "N/A" else "N/A")
