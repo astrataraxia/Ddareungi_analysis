@@ -1,6 +1,9 @@
 import streamlit as st
 
-from load_data.data_load import load_parquet_year_data,load_station_data, load_population_data
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+from src.load_data.data_load import load_parquet_year_data,load_station_data, load_population_data
 
 # --- 페이지 설정 ---
 # layout="wide"로 변경하여 넓은 화면을 모두 사용합니다.
