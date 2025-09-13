@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 from src.load_data.summary_data_load import load_summary_monthly_data
 from src.load_data.data_load import load_population_data
@@ -104,8 +105,30 @@ def analyze_correlation_with_population():
     ax1.set_xticks(years)
     # Y축 그리드를 추가하여 가독성 향상
     ax1.grid(True, axis='y', linestyle=':', alpha=0.6)
-    plt.show()
 
+    # --- 6단계 (추가): 산점도를 이용한 직접적인 상관관계 시각화 ---
+    fig2, ax2 = plt.subplots(figsize=(10, 8))
+
+    # 산점도 그리기
+    ax2.scatter(final_df['인구수_증감률'], final_df['대여건수_증감률'], 
+                s=150, c='crimson', alpha=0.7, edgecolors='black', label='연도별 데이터')
+
+    # 각 점에 연도 표시
+    for i, txt in enumerate(final_df['연도']):
+        ax2.annotate(txt, (final_df['인구수_증감률'].iloc[i]+0.01, final_df['대여건수_증감률'].iloc[i]))
+
+    # 추세선(회귀선) 그리기
+    z = np.polyfit(final_df['인구수_증감률'], final_df['대여건수_증감률'], 1)
+    p = np.poly1d(z)
+    ax2.plot(final_df['인구수_증감률'], p(final_df['인구수_증감률']), "b--", alpha=0.8, label='추세선')
+
+    ax2.set_title('서울시 인구 증감률과 따릉이 대여 증감률의 상관관계', fontsize=16)
+    ax2.set_xlabel('인구수 증감률 (%)', fontsize=12)
+    ax2.set_ylabel('따릉이 대여건수 증감률 (%)', fontsize=12)
+    ax2.grid(True, linestyle='--', alpha=0.6)
+    ax2.legend()
+
+    plt.show()
     
 
 

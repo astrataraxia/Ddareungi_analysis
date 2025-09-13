@@ -97,6 +97,43 @@ def create_altair_correlation_chart(df):
     
     return combined_chart
 
+def create_altair_scatter_chart(df):
+    # 기본 차트 및 산점도(mark_point) 설정
+    scatter_plot = alt.Chart(df).mark_point(
+        size=150,       # 점 크기
+        opacity=0.8,    # 투명도
+        filled=True,    # 점 내부 채우기
+        color='crimson' # 색상
+    ).encode(
+        x=alt.X('인구수_증감률:Q', title='서울시 인구수 증감률 (%)',
+                scale=alt.Scale(zero=False) # x축이 0에서 시작하지 않도록 설정
+               ),
+        y=alt.Y('대여건수_증감률:Q', title='따릉이 대여건수 증감률 (%)'),
+        tooltip=[
+            alt.Tooltip('연도:O', title='연도'),
+            alt.Tooltip('인구수_증감률:Q', title='인구 증감률', format='.2f'),
+            alt.Tooltip('대여건수_증감률:Q', title='대여 증감률', format='.2f')
+        ]
+    )
+
+    # transform_regression을 이용해 추세선 추가
+    regression_line = scatter_plot.transform_regression(
+        '인구수_증감률', '대여건수_증감률'
+    ).mark_line(
+        color='blue',
+        strokeDash=[5, 5] # 점선 스타일
+    )
+    
+    # 산점도와 추세선을 레이어로 결합
+    final_chart = (scatter_plot + regression_line).properties(
+        title='인구 증감률과 따릉이 대여 증감률의 상관관계',
+        height=500
+    ).configure_title(
+        fontSize=18
+    )
+    
+    return final_chart
+
 # --- 메인 페이지 구성 ---
 st.title("🔗 연도별 따릉이 수요와 서울시 인구 상관관계 분석")
 st.markdown("---")
@@ -151,13 +188,18 @@ if not final_df.empty:
                 """, unsafe_allow_html=True
             )
     
-    st.write("") # 메트릭과 차트 사이에 약간의 공간 추가
+    st.write("")
 
-    # --- 2-2. Altair 차트 시각화 (이전과 동일) ---
+    # --- 2-2. Altair 차트 시각화 ---
     correlation_chart = create_altair_correlation_chart(final_df)
     st.altair_chart(correlation_chart, use_container_width=True)
 
-    # 3. 상세 데이터 (이전과 동일)
+    # --- 3. 상관관계 산점도 시각화 --
+    st.subheader("🔗 상관관계 직접 확인 (산점도)")
+    scatter_chart = create_altair_scatter_chart(final_df)
+    st.altair_chart(scatter_chart, use_container_width=True)
+
+    # 4. 상세 데이터
     with st.expander("📄 상세 데이터 보기"):
         st.dataframe(final_df)
 else:

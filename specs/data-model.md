@@ -1,166 +1,172 @@
-# Data Model for Seoul Public Bicycle "Ddareungi" Data Analysis
+# 서울 공공자전거 '따릉이' 데이터 모델 명세서
 
-## 1. Ddareungi Usage Data
+이 문서는 서울 공공자전거 '따릉이' 데이터 분석 프로젝트에서 사용하는 데이터 모델을 정의합니다. 데이터는 크게 원본 데이터와 분석을 위해 가공된 파생 데이터로 나뉩니다.
 
-Represents aggregated bicycle rental trip data.
+---
 
-**Source**: `data/paraquet/{YEAR}/*.parquet`
+## 1. 원본 데이터 (Raw Data)
 
-**Attributes**:
+프로젝트 분석의 기반이 되는 초기 데이터입니다.
 
-# parquet
-- `시작_대여소명`: Name of the starting rental station. (object)
-- `종료_대여소_ID`: Unique identifier for the ending rental station. (object)
-- `종료_대여소명`: Name of the ending rental station. (object)
-- **Note on Missing Values**: `종료_대여소_ID` can contain 'X' for missing values, in which case `종료_대여소명` will be empty.
-- `전체_건수`: Total number of rentals for the aggregated period. (int64)
-- `전체_이용_분`: Total usage duration in minutes for the aggregated period. (int64)
-- `전체_이용_거리`: Total usage distance in meters for the aggregated period. (float64)
+### 1.1. 따릉이 이용 내역 데이터
 
-# parquet
-- index | column
--   0    `기준_날짜` (int64) : Date. 20200101 (YYYYmmdd)
--   1    `집계_기준` (object) : 
--   2    `기준_시간대` (int64) : Time slot for aggregation, represented as inter (e.g. 0 for 00:00, 5 for 00:05, ..., 2335 for 23:35)
--   3    `시작_대여소_ID` (object) : starting rental station. (ref: Bicycle Station Data.대여소_ID)
--   4    `시작_대여소명` (object) : Name of the starting rental station 
-- **Note on Missing Values**: `시작_대여소명` has many None value,
--   5    `종료_대여소_ID` (object) : ending rental staation (참조: Bicycle Station Data.대여소_ID)
-- **Note on Missing Values**: `종료_대여소_ID` can contain 'X' for None value, in which case `종료_대여소명` will be None.
--   6    `종료_대여소명` (object) : Name of the ending rental station
-- **Note on Missing Values**: `종료_대여소명` has many None value,
--   7    `전체_건수` (int64) : Total number of rentals for the aggregated preiod.
--   8    `전체_이용_분` (float64) : Total usage duration in minutes (e.g. 10 -> 10 miniutes, 400 -> 400 miniutes)
--   9    `전체_이용_거리` (float64) : Total usage distance in meters
+**설명**: 특정 기간 동안 집계된 따릉이 대여 및 반납 이력 데이터입니다.
 
+**위치**: `data/parquet/{YEAR}/*.parquet`
 
-## 2. Bicycle Station Data
+**주요 속성**:
+- `기준_날짜` (int64): 데이터 기준일 (예: 20200101)
+- `집계_기준` (object): 집계 기준 (사용되지 않는 컬럼으로 보임)
+- `기준_시간대` (int64): 5분 단위로 집계된 시간대 (예: 0, 5, ..., 2355)
+- `시작_대여소_ID` (object): 대여를 시작한 대여소의 고유 ID
+- `시작_대여소명` (object): 대여를 시작한 대여소의 이름
+- `종료_대여소_ID` (object): 반납이 이루어진 대여소의 고유 ID
+- `종료_대여소명` (object): 반납이 이루어진 대여소의 이름
+- `전체_건수` (int64): 해당 시간대에 발생한 총 대여 건수
+- `전체_이용_분` (float64): 총 이용 시간을 분 단위로 기록
+- `전체_이용_거리` (float64): 총 이용 거리를 미터 단위로 기록
 
-Represents a public bicycle rental station.
+**참고1**: `시작_대여소명` 및 `종료_대여소명` 컬럼에는 다수의 결측치(None)가 존재할 수 있습니다. `종료_대여소_ID`가 'X'인 경우, 반납 정보가 없음을 의미합니다.
 
-**Source**: `data/bcycle_master_location.csv`
+**참고2**: 자료마다 컬럼 이름이 다른 경우와, 몇몇 컬럼들이 존재하지 않는 경우가 있습니다.
 
-**Attributes**:
-- `대여소_ID`: Unique identifier for the station. (String)
-- `주소1`: Primary address of the station. (String)
-- `주소2`: Secondary address or detailed location of the station. (String)
-- `위도`: Latitude coordinate of the station. (Float)
-- `경도`: Longitude coordinate of the station. (Float)
--**Note on Missing vlaues**: Some kind of `위도`, `경도` value is None
+### 1.2. 따릉이 대여소 정보 데이터
 
-## 3. Registered Population Data
+**설명**: 따릉이 대여소의 마스터 정보로, 각 대여소의 위치(주소, 좌표)를 포함합니다.
 
-Represents the registered population for different administrative districts in Seoul.
+**위치**: `data/bcycle_master_location.csv`
 
-**Source**: `data/registered_population.csv`
+**주요 속성**:
+- `대여소_ID` (string): 대여소의 고유 식별자
+- `주소1` (string): 대여소의 기본 주소
+- `주소2` (string): 대여소의 상세 주소
+- `위도` (float): 대여소의 위도 좌표
+- `경도` (float): 대여소의 경도 좌표
 
-**Attributes**:
-- `동별(1)`: Classification criterion (e.g., '합계', '동별'). (String)
-- `동별(2)`: Administrative district (e.g., '소계', '종로구', '중구'). (String)
-- `[YYYY Q/Q]` columns: Columns representing population count for each year and quarter (e.g., `2020 1/4`, `2025 1/2`, `2024` ). (Integer)
+**참고**: 일부 대여소의 `위도`, `경도` 정보에 결측치가 존재할 수 있습니다.
 
-**Note**: This file has a 2-line multi-level header. The first line indicates the year and quarter, and the second line indicates '계 (명)' for population counts.
+### 1.3. 서울시 행정구역별 등록 인구 데이터
 
-## 4. 요약 데이터 (Summarized Data)
+**설명**: 서울시 각 행정구역(동별)의 분기별 등록 인구 통계 데이터입니다.
 
-기존 parquet 데이터를 분석 목적에 맞게 가공하여 생성한 요약 데이터입니다.
+**위치**: `data/registered_population.csv`
 
-### 4.1. 일별/시간대별 요약 (Daily/Hourly Summary)
+**주요 속성**:
+- `동별(1)` (string): 분류 기준 (예: '합계', '동별')
+- `동별(2)` (string): 행정구역명 (예: '소계', '종로구', '사직동')
+- `YYYY Q/Q` 형태의 컬럼들: 연도와 분기별 인구수 (예: `2020 1/4`, `2024 2/4`)
 
-**Source**: `data/summary/summary_daily_hourly_{YEAR}.parquet`
+**참고**: 이 파일은 2줄의 다중 레벨 헤더를 가집니다. 첫 번째 줄은 연도와 분기, 두 번째 줄은 '계 (명)'으로 인구수를 나타냅니다.
 
-**생성 방식**: `data/paraquet/{YEAR}/*.parquet` 원본 데이터에서 `기준_날짜`, `기준_시간대` 정보를 추출하고, 시간대별 `전체_건수`를 합산하여 생성합니다. 이를 통해 각 시간대의 총 대여 건수를 나타냅니다.
+---
 
-**Attributes**:
-- `year`: 년도
-- `month`: 월
-- `day`: 일
-- `hour`: 시간
-- `total_rentals`: 총 대여 건수
+## 2. 파생/요약 데이터 (Derived/Summarized Data)
 
-### 4.2. 월별 요약 (Monthly Summary)
+원본 데이터를 특정 분석 목적에 맞게 가공하여 생성한 데이터입니다.
 
-**Source**: `data/summary/summary_monthly_{YEAR}.parquet`
+### 2.1. 시간대별 이용 패턴 분석 데이터
 
-**생성 방식**: `data/paraquet/{YEAR}/*.parquet` 원본 데이터에서 `기준_날짜` 정보를 이용하여 월별 `전체_건수`를 합산하여 생성합니다. 월별 총 대여 건수를 나타냅니다.
+#### 2.1.1. 일별/시간대별 요약
 
-**Attributes**:
-- `year`: 년도
-- `month`: 월
-- `total_rentals`: 총 대여 건수
+**설명**: 연도별로 각 일자의 시간대별 총 대여 건수를 집계한 데이터입니다.
 
-### 4.3. 이용 시간/거리 분석 데이터 (Usage Time/Distance Analysis Data)
+**위치**: `data/01/summary_daily_hourly_{YEAR}.parquet`
 
-**Source**: `data/02/distance_time_{YEAR}.parquet`
+**생성 방식**: 원본 이용 내역 데이터에서 `기준_날짜`와 `기준_시간대`를 기반으로 시간대별 `전체_건수`를 합산하여 생성합니다.
 
-**생성 방식**: `data/parquet/{YEAR}/*.parquet` 원본 데이터에서 `기준_날짜`, `전체_이용_분`, `전체_이용_거리` 컬럼을 추출합니다. `기준_날짜`는 `요일` 정보(월요일=0, 일요일=6)를 생성하는 데 사용된 후 제거됩니다. 결측치와 이상치가 제거된 정제된 데이터입니다.
+**주요 속성**:
+- `year`, `month`, `day`, `hour`: 년/월/일/시간
+- `total_rentals`: 해당 시간의 총 대여 건수
 
-**Attributes**:
+#### 2.1.2. 월별 요약
+
+**설명**: 연도별로 월별 총 대여 건수를 집계한 데이터입니다.
+
+**출처**: `data/01/summary_monthly_{YEAR}.parquet`
+
+**생성 방식**: 원본 이용 내역 데이터에서 `기준_날짜`를 기반으로 월별 `전체_건수`를 합산하여 생성합니다.
+
+**주요 속성**:
+- `year`, `month`: 년/월
+- `total_rentals`: 해당 월의 총 대여 건수
+
+### 2.2. 이용 시간 및 거리 분석 데이터
+
+#### 2.2.1. 연도별 이용 시간/거리 데이터
+
+**설명**: 이용 시간과 거리에 대한 분석을 위해 정제된 데이터입니다.
+
+**출처**: `data/02/distance_time_{YEAR}.parquet`
+
+**생성 방식**: 원본 데이터에서 `전체_이용_분`, `전체_이용_거리` 컬럼을 추출하고, `기준_날짜`를 이용해 `요일` 정보를 추가한 후, 결측치와 이상치를 제거하여 생성합니다.
+
+**주요 속성**:
 - `전체_이용_분` (float64): 총 이용 시간 (분)
 - `전체_이용_거리` (float64): 총 이동 거리 (미터)
-- `요일` (int64): 요일 정보 (월요일=0, 일요일=6)
+- `요일` (int64): 요일 정보 (월요일=0, ..., 일요일=6)
 
----
+#### 2.2.2. 연도별 통계 요약
 
-**Source**: `data/02/yearly_summary.parquet`
+**설명**: 연도별 이용 시간 및 거리의 주요 통계(평균, 중앙값 등)를 요약한 데이터입니다.
 
-**생성 방식**: `distance_time_{YEAR}.parquet` 데이터를 연도별로 그룹화하여 주요 통계(평균, 중앙값, 표준편차 등)를 계산합니다.
+**위치**: `data/02/yearly_summary.parquet`
 
-**Attributes**:
-- `year` (int64): 연도
-- `total_records` (int64): 유효 데이터 건수
-- `avg_time` (float64): 평균 이용 시간 (분)
-- `avg_distance` (float64): 평균 이용 거리 (미터)
-- `median_time` (float64): 이용 시간의 중앙값 (분)
-- `median_distance` (float64): 이용 거리의 중앙값 (미터)
-- `std_time` (float64): 이용 시간의 표준편차 (분)
-- `std_distance` (float64): 이용 거리의 표준편차 (미터)
+**생성 방식**: `distance_time_{YEAR}.parquet` 데이터를 연도별로 그룹화하여 계산합니다.
 
----
+**주요 속성**:
+- `year`: 연도
+- `total_records`: 유효 데이터 건수
+- `avg_time`, `avg_distance`: 평균 이용 시간(분) 및 거리(미터)
+- `median_time`, `median_distance`: 이용 시간 및 거리의 중앙값
+- `std_time`, `std_distance`: 이용 시간 및 거리의 표준편차
 
-**Source**: `data/02/yearly_detailed_summary.json`
+#### 2.2.3. 연도별 상세 통계 요약
 
-**생성 방식**: `distance_time_{YEAR}.parquet` 데이터를 기반으로 `yearly_summary.parquet`의 통계를 포함하여, 요일별 평균 이용 시간 및 거리 등 더 상세한 정보를 JSON 형식으로 저장합니다.
+**설명**: `yearly_summary.parquet`의 통계를 포함하여, 요일별 평균 이용 시간 및 거리 등 더 상세한 정보를 JSON 형식으로 저장한 데이터입니다.
 
-**Attributes**:
+**출처**: `data/02/yearly_detailed_summary.json`
+
+**주요 속성**:
 - `weekday_avg_time` (dict): 요일별 평균 이용 시간
 - `weekday_avg_distance` (dict): 요일별 평균 이용 거리
-- (`yearly_summary.parquet`의 모든 필드 포함)
+- `yearly_summary.parquet`의 모든 필드를 포함
 
-### 4.4. 대여소 및 경로 분석 데이터 (Station and Route Analysis Data)
+### 2.3. 대여소 및 주요 경로 분석 데이터
 
-**Source**: `data/03/station_summary.parquet`
+#### 2.3.1. 대여소별 이용 현황 요약
 
-**생성 방식**: 모든 기간의 원본 데이터를 스트리밍 방식으로 처리하여, 각 대여소별 총 대여 건수와 총 반납 건수를 집계합니다. 이 후 마스터 대여소 정보(`bcycle_master_location.csv`)와 결합하여 주소 및 좌표 정보를 추가합니다.
+**설명**: 전체 기간 동안 각 대여소의 총 대여/반납 건수를 집계하고, 대여소 마스터 정보와 결합한 데이터입니다.
 
-**Attributes**:
-- `대여소_ID` (object): 대여소 고유 ID
-- `주소1` (object): 대여소의 기본 주소
-- `주소2` (object): 대여소의 상세 주소
-- `위도` (float64): 위도 좌표
-- `경도` (float64): 경도 좌표
-- `총_대여건수` (int64): 해당 대여소에서 출발한 총 대여 건수
-- `총_반납건수` (int64): 해당 대여소에 도착한 총 반납 건수
-- `총_이용건수` (int64): 총 대여 + 총 반납 건수
-- `순이동량` (int64): 총 대여 - 총 반납 건수 (양수: 유출, 음수: 유입)
+**위치**: `data/03/station_summary.parquet`
 
----
+**생성 방식**: 전체 원본 데이터를 스트리밍 처리하여 대여소별 총 대여/반납 건수를 집계한 후, 대여소 마스터 정보(`bcycle_master_location.csv`)와 결합하여 주소 및 좌표 정보를 추가합니다.
 
-**Source**: `data/03/route_summary.parquet`
+**주요 속성**:
+- `대여소_ID`: 대여소 고유 ID
+- `주소1`, `주소2`, `위도`, `경도`: 대여소 위치 정보
+- `총_대여건수`, `총_반납건수`: 총 대여 및 반납 건수
+- `총_이용건수`: 대여와 반납의 합
+- `순이동량`: `총_대여건수` - `총_반납건수` (양수: 유출 우세, 음수: 유입 우세)
 
-**생성 방식**: 모든 기간의 원본 데이터를 스트리밍 방식으로 처리하여, (시작 대여소, 종료 대여소) 쌍으로 그룹화하여 경로별 총 이용 건수를 집계합니다. 이후 마스터 대여소 정보를 결합하여 각 경로의 시작점과 종료점의 주소 및 좌표 정보를 추가합니다.
+#### 2.3.2. 경로별 이용 현황 요약
 
-**Attributes**:
-- `시작_대여소_ID` (object): 출발 대여소 ID
-- `종료_대여소_ID` (object): 도착 대여소 ID
-- `이용_건수` (int64): 해당 경로의 총 이용 건수
-- `이용_형태` (object): '편도' 또는 '왕복' (시작점과 도착점이 동일한 경우 '왕복')
-- `주소1_시작` / `주소2_시작` / `위도_시작` / `경도_시작`: 출발지 정보
-- `주소1_종료` / `주소2_종료` / `위도_종료` / `경도_종료`: 도착지 정보
+**설명**: 전체 기간 동안의 (출발 대여소, 도착 대여소) 쌍을 기준으로 경로별 이용 건수를 집계한 데이터입니다.
 
-### 4.5 서울시 인구증감에 따른 따릉이 사용자 변화
+**위치**: `data/03/route_summary.parquet`
 
-**Source** `data/01/summary_monthly_{Year}.parquet`
-**Source** `data/registered_population.csv`
+**생성 방식**: 전체 원본 데이터를 스트리밍 처리하여 경로별 이용 건수를 집계하고, 대여소 마스터 정보를 결합하여 각 경로의 시작점과 종료점 정보를 추가합니다.
 
-- 기존에 Preprocessing 하였던 자료들로 결과 도출이 가능하기에 이대로 사용한다.
+**주요 속성**:
+- `시작_대여소_ID`, `종료_대여소_ID`: 출발 및 도착 대여소 ID
+- `이용_건수`: 해당 경로의 총 이용 건수
+- `이용_형태`: '편도' 또는 '왕복' (출발지와 도착지가 동일한 경우)
+- `주소1_시작`, `위도_시작` 등: 출발지 위치 정보
+- `주소1_종료`, `위도_종료` 등: 도착지 위치 정보
+
+### 2.4. 서울시 인구와 따릉이 이용량 비교 분석
+
+**설명**: 서울시 인구 증감과 따릉이 이용량 변화의 상관관계를 분석하기 위해 기존에 생성된 파생 데이터를 활용합니다. 별도의 추가 전처리 파일은 생성하지 않습니다.
+
+**사용 데이터**:
+- `data/01/summary_monthly_{YEAR}.parquet` (월별 따릉이 이용 건수)
+- `data/registered_population.csv` (분기별 서울시 등록 인구)
